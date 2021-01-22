@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/3.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
-
+import datetime
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -25,6 +25,8 @@ SECRET_KEY = ')ly=--v@cp(^pkdod7-tkmky64hd8d&08=)=#lbxk$^)y9-)81'
 DEBUG = True
 
 ALLOWED_HOSTS = []
+AUTH_USER_MODEL = 'authentication.User'
+
 
 # Application definition
 
@@ -53,6 +55,32 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'sauce_shopping.urls'
+
+
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        'Bearer': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header'
+        }
+    }
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': datetime.timedelta(days=10),
+    'REFRESH_TOKEN_LIFETIME': datetime.timedelta(days=10),
+}
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 50,
+    'NON_FIELD_ERRORS_KEY': 'error',
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
+}
 
 TEMPLATES = [
     {
