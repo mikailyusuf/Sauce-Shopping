@@ -1,7 +1,15 @@
+from django.conf.urls import url
+from django.urls import path, include
+from rest_framework import routers
 
-from django.urls import path
+from .views import TestUpload, UploadProductView
+
+router = routers.DefaultRouter()
+router.register('', TestUpload, basename='cutareadel')
+
 urlpatterns = [
-    # path('register', RegisterView.as_view(), name="register"),
+# url('upload_product', include(router.urls)),
+    path('upload_product', UploadProductView.as_view(), name="upload-product"),
     # path('email-verify/', VerifyEmail.as_view(), name="email-verify"),
     # path('login/', LoginAPIView.as_view(), name="login"),
     # path('logout/', LogoutAPIView.as_view(), name="logout"),
