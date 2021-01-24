@@ -1,15 +1,23 @@
 from rest_framework import serializers
 
-from sauce_shopping.orders.models import ShippingAdrress, Orders
+from authentication.models import User
+from orders.models import ShippingAddress, Orders
 
 
 class ShippingAdrressSerializer(serializers.ModelSerializer):
     class Meta:
-        Model = ShippingAdrress
+        model = ShippingAddress
         fields = '__all__'
 
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields=["first_name","last_name","email"]
 
 class OrdersSerializer(serializers.ModelSerializer):
+    user = UserSerializer(read_only=True)
     class Meta:
-        Model = Orders
-        fields = '__all__'
+        model = Orders
+        fields = ["user","product"]
+        depth=1

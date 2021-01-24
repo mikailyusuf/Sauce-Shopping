@@ -1,11 +1,11 @@
 from django.db import models
 
-from sauce_shopping.authentication.models import User
-from sauce_shopping.products.models import Products
+from authentication.models import User
+from products.models import Products
 
 
 class ShippingAddress(models.Model):
-    user = models.OneToOneField(User)
+    user = models.ForeignKey(User,on_delete=models.CASCADE)
     country=models.CharField(max_length=255)
     postal_code=models.CharField(max_length=255,null=True)
     state=models.CharField(max_length=255)
@@ -14,8 +14,8 @@ class ShippingAddress(models.Model):
 
 
 class Orders(models.Model):
-    user = models.ForeignKey(User)
-    product = models.ForeignKey(Products)
+    user = models.ForeignKey(User,on_delete=models.CASCADE)
+    product = models.ForeignKey(Products,on_delete=models.CASCADE)
     date = models.DateTimeField(auto_created=True,auto_now_add=True)
     units= models.IntegerField(default=1)
-    shipping_address = models.ForeignKey(ShippingAddress)
+    shipping_address = models.ForeignKey(ShippingAddress,on_delete=models.CASCADE)

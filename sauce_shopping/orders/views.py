@@ -1,15 +1,18 @@
 from django.http import Http404
 from django.shortcuts import render
-from requests import Response
-from rest_framework import status, permissions
+from rest_framework.response import Response
+
+from rest_framework import status, permissions, views, generics
 from rest_framework.views import APIView
 
-from sauce_shopping.orders.models import Orders, ShippingAddress
-from sauce_shopping.orders.serializers import OrdersSerializer, ShippingAdrressSerializer
+from orders.models import Orders, ShippingAddress
+from orders.serializers import OrdersSerializer, ShippingAdrressSerializer
+from products.models import Products
 
 
-class OrdersDetailsView(APIView):
+class OrdersDetailsView(generics.GenericAPIView):
     permission_classes = (permissions.IsAuthenticated,)
+    serializer_class = OrdersSerializer
 
     def get_object(self, pk):
         try:
@@ -36,18 +39,43 @@ class OrdersDetailsView(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class CreateOrderView(APIView):
+class CreateOrderView(generics.GenericAPIView):
     permission_classes = (permissions.IsAuthenticated,)
+    serializer_class = OrdersSerializer
 
     def post(self, request):
         user = request.user
         product = request.data['product']
+        prr = Products.objects.get(id=product)
+        print(str(prr))
         units = request.data['units']
         shipping_address = request.data['shipping_address']
-        Orders.objects.create(user=user, product=product, units=units, shipping_address=shipping_address)
+        ship = ShippingAddress.objects.get(id=shipping_address)
+        print(str(ship))
+        try:
+            order = Orders.objects.create(user=user, product=prr, units=units, shipping_address=ship)
+            return Response(status=status.HTTP_201_CREATED)
+        except Exception as e:
+            print(str(e))
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        # self.serializer_class(order)
+        # self.serializer_class.data,
+        return Response(status=status.HTTP_201_CREATED)
+
+    def get(self, request):
+        user = request.user
+        try:
+            orders = Orders.objects.filter(user=user)
+            serializer = self.serializer_class(orders, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except orders.DoesNotExist:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
-class ShippingAdressView(APIView):
+class ShippingAdressView(generics.GenericAPIView):
+    serializer_class = ShippingAdrressSerializer
+    permission_classes = (permissions.IsAuthenticated,)
 
     def post(self, request):
         user = request.user
@@ -57,14 +85,14 @@ class ShippingAdressView(APIView):
         phone_number = request.data['phone_number']
         order = ShippingAddress.objects.create(user=user, country=country, state=state,
                                                address=address, phone_number=phone_number)
-        serializer = ShippingAdrressSerializer(order)
+        serializer = self.serializer_class(order)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-    def get(self, request, pk, format=None):
+    def get(self, request):
         user = request.user
         try:
             address = ShippingAddress.objects.filter(user=user)
-            serializer = ShippingAdrressSerializer(address)
+            serializer = self.serializer_class(address, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
 
         except ShippingAddress.DoesNotExist:
@@ -72,11 +100,5 @@ class ShippingAdressView(APIView):
 
     def delete(self, request):
         user = request.user
-        address = ShippingAddress.objects.filter(user=user)
-        address.delete
-        serializer = ShippingAdrressSerializer(address)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-
-
-
+        address = ShippingAddress.objects.filter(user=user).delete()
+        return Response(status=status.HTTP_200_OK)

@@ -1,5 +1,7 @@
 from django.http import Http404
-from rest_framework import status, permissions
+from drf_yasg.utils import swagger_auto_schema
+from rest_framework import status, permissions, generics
+from rest_framework.decorators import action
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -9,8 +11,9 @@ from .serializers import ProductSerializer, ImageSerializer
 from .utils import Utils
 
 
-class ProductDetail(APIView):
+class ProductDetail(generics.GenericAPIView):
     permission_classes = (permissions.IsAuthenticated,)
+    serializer_class = ProductSerializer
 
     def get_object(self, pk):
         try:
@@ -39,10 +42,14 @@ class ProductDetail(APIView):
         return Response(status=status.HTTP_401_UNAUTHORIZED)
 
 
-class UploadProductView(APIView):
+class UploadProductView(generics.GenericAPIView):
+    serializer_class = ProductSerializer
     parser_classes = (MultiPartParser, FormParser)
     permission_classes = (permissions.IsAuthenticated,)
 
+
+    @swagger_auto_schema(operation_description='Upload file...',)
+    @action(detail=False, methods=['post'])
     def post(self, request):
         user = request.user
         product_name = request.data['product_name']

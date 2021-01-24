@@ -1,6 +1,6 @@
 from django.db import models
 
-from sauce_shopping.authentication.models import User
+from authentication.models import User
 
 
 class Image(models.Model):
