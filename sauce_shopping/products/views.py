@@ -1,39 +1,50 @@
-import jwt
-from django.contrib.sites.shortcuts import get_current_site
-from django.shortcuts import render
-from django.urls import reverse
-from rest_framework import generics, status, views, permissions, viewsets
+from django.http import Http404
+from rest_framework import status, permissions
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .models import Products, Image
+from .models import Products
 from .serializers import ProductSerializer, ImageSerializer
-from . import utils
 from .utils import Utils
 
 
-class TestUpload(viewsets.ModelViewSet):
-    queryset = Products.objects.all()
-    serializer_class = ProductSerializer
+class ProductDetail(APIView):
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def get_object(self, pk):
+        try:
+            return Products.objects.get(pk=pk)
+        except Products.DoesNotExist:
+            raise Http404
+
+    def get(self, request, pk, format=None):
+        products = self.get_object(pk)
+        serializer = ProductSerializer(products)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    # def put(self, request, pk, format=None):
+    #     snippet = self.get_object(pk)
+    #     serializer = ProductSerializer(snippet, data=request.data)
+    #     if serializer.is_valid():
+    #         serializer.save()
+    #         return Response(serializer.data)
+    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk, format=None):
+        if(request.user.is_staff):
+            product = self.get_object(pk)
+            product.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+
+class UploadProductView(APIView):
     parser_classes = (MultiPartParser, FormParser)
-
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
-        headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
-
-    def perform_create(self, serializer):
-        serializer.save()
-
-
-class UploadProductView(generics.GenericAPIView):
-    # queryset = Products.objects.all()
-    parser_classes = (MultiPartParser, FormParser)
+    permission_classes = (permissions.IsAuthenticated,)
 
     def post(self, request):
+        user = request.user
         product_name = request.data['product_name']
         product_description = request.data['product_description']
         max_delivery_time = request.data['max_delivery_time']
@@ -53,7 +64,8 @@ class UploadProductView(generics.GenericAPIView):
 
         if flag == 1:
             try:
-                product = Products.objects.create(product_name=product_name, product_description=product_description,
+                product = Products.objects.create(user=user, product_name=product_name,
+                                                  product_description=product_description,
                                                   price=price, max_delivery_time=max_delivery_time,
                                                   images=images, units_available=units_available)
             except:
