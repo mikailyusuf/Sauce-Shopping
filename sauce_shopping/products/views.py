@@ -55,6 +55,7 @@ class UploadProductView(generics.GenericAPIView):
         product_name = request.data['product_name']
         product_description = request.data['product_description']
         max_delivery_time = request.data['max_delivery_time']
+        category = request.data['category']
         units_available = request.data['units_available']
         price = request.data['price']
         flag = 1
@@ -71,7 +72,7 @@ class UploadProductView(generics.GenericAPIView):
 
         if flag == 1:
             try:
-                product = Products.objects.create(user=user, product_name=product_name,
+                product = Products.objects.create(user=user, product_name=product_name,category=category,
                                                   product_description=product_description,
                                                   price=price, max_delivery_time=max_delivery_time,
                                                   images=images, units_available=units_available)

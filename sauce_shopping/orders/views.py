@@ -5,8 +5,8 @@ from rest_framework.response import Response
 from rest_framework import status, permissions, views, generics
 from rest_framework.views import APIView
 
-from orders.models import Orders, ShippingAddress
-from orders.serializers import OrdersSerializer, ShippingAdrressSerializer
+from orders.models import Orders, ShippingAddress, Cart
+from orders.serializers import OrdersSerializer, ShippingAdrressSerializer, CartSerializer
 from products.models import Products
 
 
@@ -45,15 +45,15 @@ class CreateOrderView(generics.GenericAPIView):
 
     def post(self, request):
         user = request.user
-        product = request.data['product']
-        prr = Products.objects.get(id=product)
-        print(str(prr))
+        product_id = request.data['product']
+        product = Products.objects.get(id=product_id)
+        print(str(product))
         units = request.data['units']
         shipping_address = request.data['shipping_address']
         ship = ShippingAddress.objects.get(id=shipping_address)
         print(str(ship))
         try:
-            order = Orders.objects.create(user=user, product=prr, units=units, shipping_address=ship)
+            order = Orders.objects.create(user=user, product=product, units=units, shipping_address=ship)
             return Response(status=status.HTTP_201_CREATED)
         except Exception as e:
             print(str(e))
@@ -82,11 +82,18 @@ class ShippingAdressView(generics.GenericAPIView):
         country = request.data['country']
         state = request.data['state']
         address = request.data['address']
+        postal_code = request.data['postal_code']
         phone_number = request.data['phone_number']
-        order = ShippingAddress.objects.create(user=user, country=country, state=state,
-                                               address=address, phone_number=phone_number)
-        serializer = self.serializer_class(order)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        try:
+            order = ShippingAddress.objects.create(user=user, country=country,
+                                                   state=state, postal_code=postal_code,
+                                                   address=address, phone_number=phone_number)
+            serializer = self.serializer_class(order)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        except Exception as e:
+            message = {'error': str(e)}
+            return Response(message, status=status.HTTP_400_BAD_REQUEST)
 
     def get(self, request):
         user = request.user
@@ -102,3 +109,31 @@ class ShippingAdressView(generics.GenericAPIView):
         user = request.user
         address = ShippingAddress.objects.filter(user=user).delete()
         return Response(status=status.HTTP_200_OK)
+
+
+class CartView(APIView):
+
+    def post(self, request):
+        user = request.user
+        product_id = request.data['product']
+        try:
+            product = Products.objects.get(id=product_id)
+            cart = Cart.objects.create(user=user, product=product)
+            cart_data = CartSerializer(cart)
+
+            return Response(cart_data.data, status=status.HTTP_201_CREATED)
+        except Exception as e:
+            print(str(e))
+            message = {
+            "error":str(e)
+            }
+            return Response(message,status=status.HTTP_400_BAD_REQUEST)
+
+    def get(self, request):
+        user = request.user
+        try:
+            orders = Cart.objects.filter(user=user)
+            serializer = self.serializer_class(orders, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except orders.DoesNotExist:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
