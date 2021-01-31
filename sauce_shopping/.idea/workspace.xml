@@ -20,26 +20,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b52968a9-4389-41e1-b8f8-c5562c5c2f28" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/Procfile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/runtime.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/Screenshot_from_2020-12-30_11-00-53.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/Screenshot_from_2020-12-30_11-00-53_5V5DMbx.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/Screenshot_from_2020-12-30_11-00-53_vl4UmFi.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/Screenshot_from_2021-01-13_19-44-34.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/Screenshot_from_2021-01-13_19-44-34_Fnv3tnY.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/Screenshot_from_2021-01-13_19-44-34_VAtDply.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/Screenshot_from_2021-01-21_19-04-23.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/Screenshot_from_2021-01-21_19-04-23_iMOaOR0.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/Screenshot_from_2021-01-21_19-04-23_sLgEQjk.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/orders/migrations/0001_initial.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/orders/migrations/0002_auto_20210124_1343.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/orders/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/orders/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/orders/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/orders/serializers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/orders/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/orders/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/orders/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/orders/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/products/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/products/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/products/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/products/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sauce_shopping/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/sauce_shopping/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sauce_shopping/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/sauce_shopping/settings.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -67,6 +51,7 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -78,6 +63,9 @@
       <updated>1611320916813</updated>
     </task>
     <servers />
+  </component>
+  <component name="UnknownFeatures">
+    <option featureType="com.intellij.fileTypeFactory" implementationName="requirements.txt" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
@@ -92,10 +80,14 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="278" y="133" width="800" height="535" key="Vcs.Push.Dialog.v2" timestamp="1611499083282">
+    <state x="172" y="31" width="1022" height="737" key="SettingsEditor" timestamp="1612091168912">
       <screen x="0" y="27" width="1366" height="741" />
     </state>
-    <state x="278" y="133" width="800" height="535" key="Vcs.Push.Dialog.v2/0.27.1366.741@0.27.1366.741" timestamp="1611499083282" />
+    <state x="172" y="31" width="1022" height="737" key="SettingsEditor/0.27.1366.741@0.27.1366.741" timestamp="1612091168912" />
+    <state x="278" y="133" width="800" height="535" key="Vcs.Push.Dialog.v2" timestamp="1611951161092">
+      <screen x="0" y="27" width="1366" height="741" />
+    </state>
+    <state x="278" y="133" width="800" height="535" key="Vcs.Push.Dialog.v2/0.27.1366.741@0.27.1366.741" timestamp="1611951161092" />
     <state x="346" y="89" width="672" height="678" key="search.everywhere.popup" timestamp="1611322522743">
       <screen x="0" y="27" width="1366" height="741" />
     </state>
